@@ -8,30 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TravelTimeForLeg {
-	private static enum TravelTimeTrendType {
-		INCREASING("increasing");
-
-		private String key;
-
-		TravelTimeTrendType(String key) {
-			this.key = key;
-		}
-
-		@JsonCreator
-		public static TravelTimeTrendType fromString(String key) {
-			return key == null ? null : TravelTimeTrendType.valueOf(key
-					.toUpperCase());
-		}
-
-		public String toString() {
-			return name().toLowerCase();
-		}
-	}
-
-	private static enum TravelTimeType {
-		instantaneous;
-	}
-
 	private final String id;
 	private final BasicDataValue basicDataValue;
 
