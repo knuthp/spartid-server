@@ -25,6 +25,7 @@ import com.mongodb.util.JSON;
 
 @Controller
 public class MainController {
+	static final String REISETIDER_URL = "http://www.reisetider.no/xml/reisetider.xml";
 	private static Log LOG = LogFactory.getLog(MainController.class);
 	private DB db;
 
@@ -32,7 +33,7 @@ public class MainController {
 	public MainController(DB db) {
 		this.db = db;
 	}
-	
+
 	public MainController() {
 		this.db = null;
 	}
@@ -46,9 +47,9 @@ public class MainController {
 		if (db != null) {
 			LOG.info("Adding to MongoDB");
 			DBCollection coll = db.getCollection("reisetiderRT");
-			String url = "http://www.reisetider.no/xml/reisetider.xml";
+			String url = REISETIDER_URL;
 			String jsonString = getUrlAndConvertToJson(url);
-			DBObject dbObj  = (DBObject) JSON.parse(jsonString);
+			DBObject dbObj = (DBObject) JSON.parse(jsonString);
 			coll.insert(dbObj);
 		} else {
 			LOG.info("No MongoDB");
@@ -57,14 +58,10 @@ public class MainController {
 		return response;
 	}
 
-	
-	
-	
-	private String getUrlAndConvertToJson(String url) {
+	String getUrlAndConvertToJson(String url) {
 		LOG.info("Handling xml to json CORS : " + url);
 		try {
-			InputStream in = new URL(
-					url).openStream();
+			InputStream in = new URL(url).openStream();
 			String xml = IOUtils.toString(in);
 			JSONObject xmlJSONObj = XML.toJSONObject(xml);
 			return xmlJSONObj.toString(4);
@@ -75,6 +72,5 @@ public class MainController {
 		}
 		return "";
 	}
-
 
 }
