@@ -8,3 +8,5 @@ local.properties
 .classpath
 .project
 .env
+
+src/main/resources/config/application-secure.properties
