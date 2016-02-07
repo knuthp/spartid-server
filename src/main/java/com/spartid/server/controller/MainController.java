@@ -1,8 +1,10 @@
 package com.spartid.server.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spartid.server.road.LegLocation;
 import com.spartid.server.road.LegTravelTime;
 import com.spartid.server.road.TravelTimeData;
 import com.spartid.server.road.TravelTimeService;
@@ -29,26 +32,34 @@ public class MainController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> home() {
+	public ApiRoot home() {
 		LOG.info("Handling a request");
-		Map<String, Object> response = new HashMap<String, Object>();
-		response.put("result", "ok");
-
-		return response;
+		ApiRoot apiRoot = new ApiRoot();
+		apiRoot.add(linkTo(methodOn(this.getClass()).locations()).withRel("locations"));
+		apiRoot.add(linkTo(methodOn(this.getClass()).traveltimes()).withRel("traveltimes"));
+		apiRoot.add(linkTo(methodOn(this.getClass()).routetimes()).withRel("routetimes"));
+		return apiRoot;
 	}
 
 	@RequestMapping(value = "/traveltimes", method = RequestMethod.GET)
 	@ResponseBody
-	public TravelTimeData traveltimes() {
+	public List<LegTravelTime> traveltimes() {
 		LOG.info("Handling a request");
-		return travelTimeService.getTravelTime();
+		return travelTimeService.getTravelTime().getLegsTravelTime();
 	}
 
 	@RequestMapping(value = "/traveltimes/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public LegTravelTime legtime(@PathVariable("id") long id) {
 		LOG.info("Handling a request");
-		return travelTimeService.getTravelTime().getLeg(id);
+		return travelTimeService.getTravelTime().getLegTravelTime(id);
+	}
+
+	@RequestMapping(value = "routetimes", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RouteTime> routetimes() {
+		TravelTimeData travelTimeData = travelTimeService.getTravelTime();
+		return Arrays.asList(getRouteTimeAskerLysaker(1, travelTimeData), getRouteTimeLysakerAsker(2, travelTimeData));
 	}
 
 	@RequestMapping(value = "routetimes/{id}", method = RequestMethod.GET)
@@ -56,14 +67,41 @@ public class MainController {
 	public RouteTime routetime(@PathVariable("id") long id) {
 		TravelTimeData travelTimeData = travelTimeService.getTravelTime();
 		if (id == 1) {
-			return new RouteTime(id, "Asker - Lysaker", Arrays.asList(travelTimeData.getLeg(100098),
-					travelTimeData.getLeg(100159), travelTimeData.getLeg(100160)));
+			return getRouteTimeAskerLysaker(id, travelTimeData);
 		} else if (id == 2) {
-			return new RouteTime(id, "Lysaker - Asker", Arrays.asList(travelTimeData.getLeg(100161),
-					travelTimeData.getLeg(100162), travelTimeData.getLeg(100101)));
+			return getRouteTimeLysakerAsker(id, travelTimeData);
 		} else {
 			return null;
 		}
 
 	}
+
+	private RouteTime getRouteTimeLysakerAsker(long id, TravelTimeData travelTimeData) {
+		return new RouteTime(id, "Lysaker - Asker", Arrays.asList(travelTimeData.getLegTravelTime(100161),
+				travelTimeData.getLegTravelTime(100162), travelTimeData.getLegTravelTime(100101)));
+	}
+
+	private RouteTime getRouteTimeAskerLysaker(long id, TravelTimeData travelTimeData) {
+		return new RouteTime(id, "Asker - Lysaker", Arrays.asList(travelTimeData.getLegTravelTime(100098),
+				travelTimeData.getLegTravelTime(100159), travelTimeData.getLegTravelTime(100160)));
+	}
+
+	@RequestMapping(value = "locations", method = RequestMethod.GET)
+	@ResponseBody
+	public List<LegLocation> locations() {
+		return travelTimeService.getTravelLocations().getLegLocations();
+	}
+
+	@RequestMapping(value = "locations/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public LegLocation location(@PathVariable("id") long id) {
+		return travelTimeService.getTravelLocations().getLegLocation(id);
+	}
+
+	@RequestMapping(value = "locations/{id}/rt", method = RequestMethod.GET)
+	@ResponseBody
+	public LegTravelTime legTravelTimeLocation(@PathVariable("id") long id) {
+		return travelTimeService.getTravelTime().getLegTravelTime(id);
+	}
+
 }

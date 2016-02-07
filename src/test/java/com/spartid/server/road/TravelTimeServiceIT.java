@@ -36,7 +36,7 @@ public class TravelTimeServiceIT {
 	@Test
 	public void testContainsKnownData() {
 		TravelTimeData travelTimeData = travelTimeService.getTravelTime();
-		LegTravelTime leg = travelTimeData.getLeg(100098L);
+		LegTravelTime leg = travelTimeData.getLegTravelTime(100098L);
 		assertThat(leg.getFreeFlowTime(), equalTo(160.0));
 		assertThat(leg.getTravelTime(), greaterThanOrEqualTo(160.0));
 		// assertThat(leg.getTravelTimeTrendType(),
@@ -44,4 +44,12 @@ public class TravelTimeServiceIT {
 		assertThat(leg.getTravelTimeTrendType(), equalTo(TravelTimeTrendType.STABLE));
 	}
 
+	@Test
+	public void testLocationsBasic() throws Exception {
+		TravelTimeData travelTimeDate = travelTimeService.getTravelLocations();
+		LegLocation legLocation = travelTimeDate.getLegLocation(100098L);
+		assertThat(legLocation.getId(), equalTo(100098L));
+		assertThat(legLocation.getName(), equalTo("Asker - Holmen"));
+
+	}
 }
