@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SparTidServerMain {
-    public static void main(String[] args) {
-        SpringApplication.run(SparTidServerMain.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(SparTidServerMain.class, args);
+	}
+
 }

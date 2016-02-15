@@ -1,5 +1,6 @@
 package com.spartid.server.road;
 
+import com.google.common.base.MoreObjects;
 import com.spartid.server.road.TravelTimeData.PayloadPublication.ElaboratedData;
 
 public class LegTravelTime {
@@ -37,4 +38,10 @@ public class LegTravelTime {
 		return freeFlowTime;
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("id", id).add("freeFlowTime", freeFlowTime)
+				.add("travelTime", travelTime).add("travelTimeTrendType", travelTimeTrendType)
+				.add("travelTimeType", travelTimeType).toString();
+	}
 }
