@@ -17,25 +17,25 @@ import org.springframework.test.web.servlet.MockMvc;
 @ContextConfiguration
 @WebAppConfiguration
 public class MainControllerTest {
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Configuration
-	public static class ContextConfiguration {
-		@Bean
-		MainController mainController() {
-			return new MainController(null);
-		}
+    @Configuration
+    public static class ContextConfiguration {
+        @Bean
+        MainController mainController() {
+            return new MainController(null, null);
+        }
 
-	}
+    }
 
-	@Autowired
-	MainController mainController;
+    @Autowired
+    MainController mainController;
 
-	@Test
-	public void testHome() {
-		ApiRoot home = mainController.home();
+    @Test
+    public void testHome() {
+        ApiRoot home = mainController.home();
 
-		assertThat(home.getResult(), equalTo("ok"));
-	}
+        assertThat(home.getResult(), equalTo("ok"));
+    }
 
 }
