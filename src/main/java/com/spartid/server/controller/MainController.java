@@ -63,7 +63,10 @@ public class MainController {
     @ResponseBody
     public List<RouteTime> routetimes() {
         TravelTimeData travelTimeData = travelTimeService.getTravelTime();
-        return Arrays.asList(getRouteTimeAskerLysaker(1, travelTimeData), getRouteTimeLysakerAsker(2, travelTimeData));
+        return Arrays.asList(getRouteTimeAskerLysaker(1),
+                getRouteTimeLysakerAsker(2),
+                getRouteTimeSandvikaSollihogda(3),
+                getRouteTimeSollihogdaSandvika(4));
     }
 
     @RequestMapping(value = "routetimes/{id}", method = RequestMethod.GET)
@@ -71,23 +74,35 @@ public class MainController {
     public RouteTime routetime(@PathVariable("id") long id) {
         TravelTimeData travelTimeData = travelTimeService.getTravelTime();
         if (id == 1) {
-            return getRouteTimeAskerLysaker(id, travelTimeData);
+            return getRouteTimeAskerLysaker(id);
         } else if (id == 2) {
-            return getRouteTimeLysakerAsker(id, travelTimeData);
+            return getRouteTimeLysakerAsker(id);
+        } else if (id == 3) {
+            return getRouteTimeSandvikaSollihogda(id);
+        } else if (id == 4) {
+            return getRouteTimeSollihogdaSandvika(id);
         } else {
             return null;
         }
 
     }
 
-    private RouteTime getRouteTimeLysakerAsker(long id, TravelTimeData travelTimeData) {
-        return new RouteTime(id, "Lysaker - Asker", Arrays.asList(travelTimeData.getLegTravelTime(100161),
-                travelTimeData.getLegTravelTime(100162), travelTimeData.getLegTravelTime(100101)));
+    private RouteTime getRouteTimeLysakerAsker(long id) {
+        return new RouteTime(id, "Lysaker - Asker", Arrays.asList(travelTimeLookup.getTravelTimeData(100161),
+                travelTimeLookup.getTravelTimeData(100162), travelTimeLookup.getTravelTimeData(100101)));
     }
 
-    private RouteTime getRouteTimeAskerLysaker(long id, TravelTimeData travelTimeData) {
-        return new RouteTime(id, "Asker - Lysaker", Arrays.asList(travelTimeData.getLegTravelTime(100098),
-                travelTimeData.getLegTravelTime(100159), travelTimeData.getLegTravelTime(100160)));
+    private RouteTime getRouteTimeAskerLysaker(long id) {
+        return new RouteTime(id, "Asker - Lysaker", Arrays.asList(travelTimeLookup.getTravelTimeData(100098),
+                travelTimeLookup.getTravelTimeData(100159), travelTimeLookup.getTravelTimeData(100160)));
+    }
+
+    private RouteTime getRouteTimeSandvikaSollihogda(long id) {
+        return new RouteTime(id, "Sandvika - Sollihøgda", Arrays.asList(travelTimeLookup.getTravelTimeData(100256), travelTimeLookup.getTravelTimeData(100265)));
+    }
+
+    private RouteTime getRouteTimeSollihogdaSandvika(long id) {
+        return new RouteTime(id, "Sollihøgda - Sandvika", Arrays.asList(travelTimeLookup.getTravelTimeData(100264), travelTimeLookup.getTravelTimeData(100257)));
     }
 
     @RequestMapping(value = "locations", method = RequestMethod.GET)
