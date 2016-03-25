@@ -1,6 +1,7 @@
 package com.spartid.server.road;
 
 import com.google.common.base.MoreObjects;
+import com.spartid.server.google.GoogleDirections;
 import com.spartid.server.road.TravelTimeData.PayloadPublication.ElaboratedData;
 
 public class LegTravelTime {
@@ -16,6 +17,11 @@ public class LegTravelTime {
         this.travelTimeType = e.getTravelTimeType();
         this.travelTime = e.getTravelTime();
         this.freeFlowTime = e.getFreeFlowTime();
+    }
+
+    public LegTravelTime(GoogleDirections googleDirections) {
+        this.travelTime = googleDirections.getDurationInTraffic();
+        this.freeFlowTime = googleDirections.getDuration();
     }
 
     public LegTravelTime(LegTravelTime legTravelTime) {

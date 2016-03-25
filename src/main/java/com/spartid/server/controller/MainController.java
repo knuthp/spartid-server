@@ -4,7 +4,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spartid.server.google.GoogleDirections;
+import com.spartid.server.google.GoogleMapsService;
+import com.spartid.server.google.GoogleRoute;
 import com.spartid.server.road.LegLocation;
 import com.spartid.server.road.LegTravelTime;
 import com.spartid.server.road.LegTravelTimeEnriched;
@@ -27,11 +32,15 @@ public class MainController {
     public static final Logger LOG = LoggerFactory.getLogger(MainController.class);
     private final TravelTimeService travelTimeService;
     private final TravelTimeLookup travelTimeLookup;
+    private final GoogleMapsService googleMapsService;
+    private static final GoogleRoute LYSAKER_ASKER = new GoogleRoute("59.9134717,10.6415964", "59.8359977,10.4456635");
+    private static final GoogleRoute ASKER_LYSAKER = new GoogleRoute("59.8339662,10.441999", "59.9126466,10.6370975");
 
     @Autowired
-    public MainController(TravelTimeService travelTimeService, TravelTimeLookup travelTimeLookup) {
+    public MainController(TravelTimeService travelTimeService, TravelTimeLookup travelTimeLookup, GoogleMapsService googleMapsService) {
         this.travelTimeService = travelTimeService;
         this.travelTimeLookup = travelTimeLookup;
+        this.googleMapsService = googleMapsService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -88,21 +97,35 @@ public class MainController {
     }
 
     private RouteTime getRouteTimeLysakerAsker(long id) {
-        return new RouteTime(id, "Lysaker - Asker", Arrays.asList(travelTimeLookup.getTravelTimeData(100161),
-                travelTimeLookup.getTravelTimeData(100162), travelTimeLookup.getTravelTimeData(100101)));
+        Map<Provider, TravelTime> map = new HashMap<>();
+        map.put(Provider.VEGVESEN, new TravelTime(Arrays.asList(travelTimeLookup.getTravelTimeData(100161),
+                travelTimeLookup.getTravelTimeData(100162), travelTimeLookup.getTravelTimeData(100101))));
+        GoogleDirections googleDirections = googleMapsService.getRoute(LYSAKER_ASKER);
+        map.put(Provider.GOOGLE,
+                new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Lysaker - Asker")))));
+        return new RouteTime(id, "Lysaker - Asker", map);
     }
 
     private RouteTime getRouteTimeAskerLysaker(long id) {
-        return new RouteTime(id, "Asker - Lysaker", Arrays.asList(travelTimeLookup.getTravelTimeData(100098),
-                travelTimeLookup.getTravelTimeData(100159), travelTimeLookup.getTravelTimeData(100160)));
+        Map<Provider, TravelTime> map = new HashMap<>();
+        map.put(Provider.VEGVESEN, new TravelTime(Arrays.asList(travelTimeLookup.getTravelTimeData(100098),
+                travelTimeLookup.getTravelTimeData(100159), travelTimeLookup.getTravelTimeData(100160))));
+        GoogleDirections googleDirections = googleMapsService.getRoute(ASKER_LYSAKER);
+        map.put(Provider.GOOGLE,
+                new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Asker - Lysaker")))));
+        return new RouteTime(id, "Asker - Lysaker", map);
     }
 
     private RouteTime getRouteTimeSandvikaSollihogda(long id) {
-        return new RouteTime(id, "Sandvika - Sollihøgda", Arrays.asList(travelTimeLookup.getTravelTimeData(100256), travelTimeLookup.getTravelTimeData(100265)));
+        Map<Provider, TravelTime> map = new HashMap<>();
+        map.put(Provider.VEGVESEN, new TravelTime(Arrays.asList(travelTimeLookup.getTravelTimeData(100256), travelTimeLookup.getTravelTimeData(100265))));
+        return new RouteTime(id, "Sandvika - Sollihøgda", map);
     }
 
     private RouteTime getRouteTimeSollihogdaSandvika(long id) {
-        return new RouteTime(id, "Sollihøgda - Sandvika", Arrays.asList(travelTimeLookup.getTravelTimeData(100264), travelTimeLookup.getTravelTimeData(100257)));
+        Map<Provider, TravelTime> map = new HashMap<>();
+        map.put(Provider.VEGVESEN, new TravelTime(Arrays.asList(travelTimeLookup.getTravelTimeData(100264), travelTimeLookup.getTravelTimeData(100257))));
+        return new RouteTime(id, "Sollihøgda - Sandvika", map);
     }
 
     @RequestMapping(value = "locations", method = RequestMethod.GET)

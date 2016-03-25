@@ -1,18 +1,16 @@
 package com.spartid.server.controller;
 
-import java.util.List;
-
-import com.spartid.server.road.LegTravelTimeEnriched;
+import java.util.Map;
 
 public class RouteTime {
     private final long id;
     private final String name;
-    private final List<LegTravelTimeEnriched> legs;
+    private final Map<Provider, TravelTime> map;
 
-    public RouteTime(long id, String name, List<LegTravelTimeEnriched> legs) {
+    public RouteTime(long id, String name, Map<Provider, TravelTime> map) {
         this.id = id;
         this.name = name;
-        this.legs = legs;
+        this.map = map;
     }
 
     public long getId() {
@@ -23,16 +21,7 @@ public class RouteTime {
         return name;
     }
 
-    public double getTravelTime() {
-        return legs.stream().mapToDouble(e -> e.getTravelTime()).sum();
+    public Map<Provider, TravelTime> getProviderData() {
+        return map;
     }
-
-    public double getFreeFlowTime() {
-        return legs.stream().mapToDouble(e -> e.getFreeFlowTime()).sum();
-    }
-
-    public List<LegTravelTimeEnriched> getLegs() {
-        return legs;
-    }
-
 }
