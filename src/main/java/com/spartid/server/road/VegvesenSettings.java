@@ -1,5 +1,7 @@
 package com.spartid.server.road;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +11,9 @@ public class VegvesenSettings {
 
     private String travelTimeDataUrl;
     private String predefinedTravelTimeLocationsUrl;
+    @NotNull
     private String username;
+    @NotNull
     private String password;
 
     public String getTravelTimeDataUrl() {

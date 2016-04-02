@@ -21,5 +21,4 @@ public class LinearCoordinates extends ArrayList<UtmPosition> implements List<Ut
         }
         return this.get(this.size() - 1);
     }
-
 }

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LocationsLookup {
-    private Map<Long, LegLocation> idToName = new HashMap<>();
-    private TravelTimeService travelTimeService;
+    private final Map<Long, LegLocation> idToName = new HashMap<>();
+    private final TravelTimeService travelTimeService;
 
     @Autowired
     public LocationsLookup(TravelTimeService travelTimeService) {

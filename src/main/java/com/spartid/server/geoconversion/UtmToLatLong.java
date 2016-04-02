@@ -7,7 +7,9 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UtmToLatLong {
 
     private CoordinateReferenceSystem utmZone33NRef;

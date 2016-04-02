@@ -1,9 +1,13 @@
 package com.spartid.server.road;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.spartid.server.controller.TravelTime;
+import com.spartid.server.route.Route;
 
 @Component
 public class TravelTimeLookup {
@@ -29,5 +33,9 @@ public class TravelTimeLookup {
         LegTravelTime legTravelTime = travelTImeData.getLegTravelTime(id);
         LegTravelTimeEnriched legTravelTimeEnriched = new LegTravelTimeEnriched(legTravelTime, legLocation);
         return legTravelTimeEnriched;
+    }
+
+    public TravelTime getTravelTimeDate(Route route) {
+        return new TravelTime(route.getLegIds().stream().map(e -> getTravelTimeData(e)).collect(Collectors.toList()));
     }
 }

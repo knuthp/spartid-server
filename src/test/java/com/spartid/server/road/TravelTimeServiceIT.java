@@ -61,7 +61,7 @@ public class TravelTimeServiceIT {
         TravelTimeData travelTimeData = travelTimeService.getTravelLocations();
         LegLocation legLocation = travelTimeData.getLegLocation(ID_ASKER_HOLMEN);
 
-        LinearCoordinates positions = legLocation.getCoordinates();
+        LinearCoordinates positions = legLocation.getCoordinatesUtm();
 
         assertThat(positions.size(), equalTo(58));
         assertThat(positions.start(), equalTo(new UtmPosition(247194, 6644353)));

@@ -27,8 +27,7 @@ public class LegLocation {
         return name;
     }
 
-    public LinearCoordinates getCoordinates() {
+    public LinearCoordinates getCoordinatesUtm() {
         return linearCoordinates;
     }
-
 }
