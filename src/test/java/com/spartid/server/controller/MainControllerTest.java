@@ -23,7 +23,7 @@ public class MainControllerTest {
     public static class ContextConfiguration {
         @Bean
         MainController mainController() {
-            return new MainController(null, null, null);
+            return new MainController(null, null, null, null, null);
         }
 
     }

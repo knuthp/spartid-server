@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import com.google.common.base.MoreObjects;
 import com.spartid.server.geoconversion.GeoLocation2D;
 
 public class GoogleRoute {
@@ -31,6 +32,18 @@ public class GoogleRoute {
 
     public String getTo() {
         return to;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("from", from)
+                .add("to", to)
+                .toString();
+    }
+
+    public String toMapsUrl() {
+        return String.format("https://www.google.no/maps/dir/%s/%s", from, to);
     }
 
 }

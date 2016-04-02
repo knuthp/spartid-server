@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spartid.server.geoconversion.GeoLocation2D;
+import com.spartid.server.geoconversion.UtmToLatLong;
 import com.spartid.server.google.GoogleDirections;
 import com.spartid.server.google.GoogleMapsService;
 import com.spartid.server.google.GoogleRoute;
@@ -39,13 +40,16 @@ public class MainController {
     private static final GoogleRoute LYSAKER_ASKER = new GoogleRoute(new GeoLocation2D(59.9134717, 10.6415964), new GeoLocation2D(59.8359977, 10.4456635));
     private static final GoogleRoute ASKER_LYSAKER = new GoogleRoute(new GeoLocation2D(59.8339662, 10.441999), new GeoLocation2D(59.9126466, 10.6370975));
     private RouteLookup routeLookup;
+    private UtmToLatLong utmToLatLongConverter;
 
     @Autowired
-    public MainController(TravelTimeService travelTimeService, TravelTimeLookup travelTimeLookup, GoogleMapsService googleMapsService, RouteLookup routeLookup) {
+    public MainController(TravelTimeService travelTimeService, TravelTimeLookup travelTimeLookup, GoogleMapsService googleMapsService, RouteLookup routeLookup,
+            UtmToLatLong utmToLatLongConverter) {
         this.travelTimeService = travelTimeService;
         this.travelTimeLookup = travelTimeLookup;
         this.googleMapsService = googleMapsService;
         this.routeLookup = routeLookup;
+        this.utmToLatLongConverter = utmToLatLongConverter;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -105,7 +109,9 @@ public class MainController {
         Map<Provider, TravelTime> map = new HashMap<>();
         Route route = routeLookup.getRoute(2);
         map.put(Provider.VEGVESEN, travelTimeLookup.getTravelTimeDate(route));
-        GoogleDirections googleDirections = googleMapsService.getRoute(LYSAKER_ASKER);
+        GoogleRoute googleRoute = route.getGoogleRoute(utmToLatLongConverter);
+        LOG.info("Route: id={}, name={}, url={}", route.getId(), route.getName(), googleRoute.toMapsUrl());
+        GoogleDirections googleDirections = googleMapsService.getRoute(googleRoute);
         map.put(Provider.GOOGLE,
                 new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Lysaker - Asker")))));
         return new RouteTime(route, map);
@@ -115,7 +121,9 @@ public class MainController {
         Map<Provider, TravelTime> map = new HashMap<>();
         Route route = routeLookup.getRoute(1);
         map.put(Provider.VEGVESEN, travelTimeLookup.getTravelTimeDate(route));
-        GoogleDirections googleDirections = googleMapsService.getRoute(ASKER_LYSAKER);
+        GoogleRoute googleRoute = route.getGoogleRoute(utmToLatLongConverter);
+        LOG.info("Route: id={}, name={}, url={}", route.getId(), route.getName(), googleRoute.toMapsUrl());
+        GoogleDirections googleDirections = googleMapsService.getRoute(googleRoute);
         map.put(Provider.GOOGLE,
                 new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Asker - Lysaker")))));
         return new RouteTime(route, map);
@@ -125,6 +133,11 @@ public class MainController {
         Map<Provider, TravelTime> map = new HashMap<>();
         Route route = routeLookup.getRoute(3);
         map.put(Provider.VEGVESEN, travelTimeLookup.getTravelTimeDate(route));
+        GoogleRoute googleRoute = route.getGoogleRoute(utmToLatLongConverter);
+        LOG.info("Route: id={}, name={}, url={}", route.getId(), route.getName(), googleRoute.toMapsUrl());
+        GoogleDirections googleDirections = googleMapsService.getRoute(googleRoute);
+        map.put(Provider.GOOGLE,
+                new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Asker - Lysaker")))));
         return new RouteTime(route, map);
     }
 
@@ -132,6 +145,11 @@ public class MainController {
         Map<Provider, TravelTime> map = new HashMap<>();
         Route route = routeLookup.getRoute(4);
         map.put(Provider.VEGVESEN, travelTimeLookup.getTravelTimeDate(route));
+        GoogleRoute googleRoute = route.getGoogleRoute(utmToLatLongConverter);
+        LOG.info("Route: id={}, name={}, url={}", route.getId(), route.getName(), googleRoute.toMapsUrl());
+        GoogleDirections googleDirections = googleMapsService.getRoute(googleRoute);
+        map.put(Provider.GOOGLE,
+                new TravelTime(Arrays.asList(new LegTravelTimeEnriched(new LegTravelTime(googleDirections), new LegLocation(id, "Asker - Lysaker")))));
         return new RouteTime(route, map);
     }
 
