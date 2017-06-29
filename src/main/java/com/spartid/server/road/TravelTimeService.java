@@ -35,6 +35,7 @@ public class TravelTimeService {
 	}
 
 	public TravelTimeData getTravelLocations() {
+		System.out.println("url=" + locationsUrl + ", user=" + settings.getUsername() + ", password=" + settings.getPassword());
 		ResponseEntity<TravelTimeData> response = restTemplate.exchange(locationsUrl, HttpMethod.GET,
 				new HttpEntity(createHeaders(settings.getUsername(), settings.getPassword())), TravelTimeData.class);
 		return response.getBody();
