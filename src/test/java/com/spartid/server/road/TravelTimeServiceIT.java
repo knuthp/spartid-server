@@ -1,6 +1,6 @@
 package com.spartid.server.road;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalTo; 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
@@ -9,15 +9,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.spartid.server.geoconversion.UtmPosition;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration
+@SpringBootTest
+@ActiveProfiles("secure")
 public class TravelTimeServiceIT {
 
     private static final long ID_ASKER_HOLMEN = 100098L;

@@ -1,12 +1,13 @@
 package com.spartid.server.road;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
@@ -42,6 +43,16 @@ public class TravelTimeDataTest {
 		assertThat(leg.getTravelTimeType(), equalTo(TravelTimeType.ESTIMATED));
 		assertThat(leg.getTravelTime(), equalTo(610.0));
 		assertThat(leg.getFreeFlowTime(), equalTo(573.0));
+	}
+	
+	@Test
+	public void testWriteXml() throws Exception {
+		JAXBContext jaxbContext = JAXBContext.newInstance(TravelTimeData.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		TravelTimeData data = new TravelTimeData();
+		jaxbMarshaller.marshal(data, System.out);
+				
+		
 	}
 
 	private TravelTimeData parseFile(String filePath) throws JAXBException {

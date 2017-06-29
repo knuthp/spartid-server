@@ -23,28 +23,28 @@ public class TravelTimeData {
                         private String id;
                     }
 
-                    @XmlElement
+                    @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                     private PredefinedLocationReference predefinedLocationReference;
                 }
 
                 static class Duration {
-                    @XmlElement
+                	@XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                     private double duration;
                 }
 
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 private PertinentLocation pertinentLocation;
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 private String travelTimeTrendType;
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 public String travelTimeType;
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 public Duration travelTime;
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 public Duration freeFlowTravelTime;
             }
 
-            @XmlElement
+            @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
             private BasicData basicData;
 
             public long getId() {
@@ -84,11 +84,11 @@ public class TravelTimeData {
 
             static class PredefinedLocationName {
                 static class Values {
-                    @XmlElement(name = "value")
+                	@XmlElement(name = "value", namespace="http://datex2.eu/schema/2/2_0")
                     private List<String> values;
                 }
 
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 private Values values;
 
             }
@@ -97,27 +97,27 @@ public class TravelTimeData {
                 static class LinearExtension {
                     static class LinearLineStringExtension {
                         static class GmlLineString {
-                            @XmlElement
+                        	@XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                             private String coordinates;
                         }
 
-                        @XmlElement
+                        @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                         private GmlLineString gmlLineString;
                     }
 
-                    @XmlElement
+                    @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                     private LinearLineStringExtension linearLineStringExtension;
                 }
 
-                @XmlElement
+                @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
                 private LinearExtension linearExtension;
             }
 
             @XmlAttribute
             private String id;
-            @XmlElement
+            @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
             private PredefinedLocationName predefinedLocationName;
-            @XmlElement
+            @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
             private Location location;
 
             public long getId() {
@@ -141,17 +141,17 @@ public class TravelTimeData {
 
         }
 
-        @XmlElement
+        @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
         private String publicationTime;
 
-        @XmlElement
+        @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
         private List<ElaboratedData> elaboratedData;
 
-        @XmlElement
+        @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
         private List<PredefinedLocationContainer> predefinedLocationContainer;
     }
 
-    @XmlElement
+    @XmlElement(namespace="http://datex2.eu/schema/2/2_0")
     private PayloadPublication payloadPublication;
 
     public String getPublicationTime() {

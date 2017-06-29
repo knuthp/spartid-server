@@ -1,6 +1,6 @@
 package com.spartid.server.route;
 
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.not; 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,8 +18,8 @@ import com.spartid.server.SparTidServerMain;
 import com.spartid.server.road.LocationsLookup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SparTidServerMain.class)
-@ActiveProfiles("it")
+@SpringBootTest(classes = SparTidServerMain.class)
+@ActiveProfiles("secure")
 public class RouteLookupIT {
     @Configuration
     @ComponentScan(basePackageClasses = LocationsLookup.class)

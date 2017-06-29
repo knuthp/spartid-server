@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <d2LogicalModel modelBaseVersion="2"
 	xmlns="http://datex2.eu/schema/2/2_0">
-	<exchange>
-		<supplierIdentification>
-			<country>no</country>
-			<nationalIdentifier>Norwegian Public Roads Administration
-			</nationalIdentifier>
-		</supplierIdentification>
-	</exchange>
 	<payloadPublication xsi:type="ElaboratedDataPublication"
 		lang="nob" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<publicationTime>2015-10-01T20:25:31+02:00</publicationTime>
